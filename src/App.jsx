@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import RecipeTitle from "./2-component-data/RecipeTitle.jsx";
 import IngredientList from "./2-component-data/IngredientList.jsx";
 import StepsList from "./2-component-data/StepsList.jsx";
 
-const recipe = {
+const initialRecipe = {
   title: "Mashed potatoes",
   feedback: {
     rating: 4.8,
@@ -28,14 +29,34 @@ const recipe = {
 };
 
 export default function App() {
+  const [recipe, setRecipe] = useState(initialRecipe);
+  const [prepared, setPrepared] = useState(false);
+
+  useEffect(() => {
+    setPrepared(recipe.ingredients.every((ing) => ing.prepared));
+  }, [recipe]);
+
+  function ingredientClick(index) {
+    const updatedRecipe = { ...recipe };
+    updatedRecipe.ingredients[index].prepared =
+      !updatedRecipe.ingredients[index].prepared;
+    setRecipe(updatedRecipe);
+  }
+
   return (
     <article>
       <h1>Recipe Manager</h1>
       <RecipeTitle title={recipe.title} feedback={recipe.feedback} />
       <h3>Ingredients:</h3>
-      <IngredientList ingredients={recipe.ingredients}/>
+      <IngredientList
+        ingredients={recipe.ingredients}
+        ingredientClickHandler={ingredientClick}
+      />
       <h3>Steps:</h3>
-      <StepsList steps={recipe.steps}/>
+      <StepsList
+        steps={recipe.steps}
+        prepared={prepared}
+      />
     </article>
   );
 }

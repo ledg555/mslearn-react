@@ -1,10 +1,10 @@
-export default function StepsList({ steps }) {
+export default function StepsList({ steps, prepared }) {
   const StepsListItems = steps.map((step, index) => {
-    return (
-      <li key={index}>
-        {step}
-      </li>
-    );
+    return <li key={index}>{step}</li>;
   });
-  return <ol>{StepsListItems}</ol>;
+  return (
+    <ol className={prepared ? "" : "itemsNotReady"}>
+      {StepsListItems}
+    </ol>
+  );
 }
